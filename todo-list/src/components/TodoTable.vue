@@ -21,7 +21,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(item, index) in props.data" :key="index" class="text-left border-b">
+                <tr v-for="(item, index) in props.data" :key="index" class="text-left border-b" :class="{'bg-green-400' : item.status === 'completed'}">
                     <td class="py-5 px-4">
                         <h5 class="font-medium text-black">{{ item.task }}</h5>
                     </td>
@@ -40,7 +40,7 @@
                     
                     <td class="py-5 px-4">
                         <div class="flex items-center gap-2">
-                            <svg @click="handlemodal()" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-blue-600 cursor-pointer">
+                            <svg @click="handleEdit(item.id)" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-blue-600 cursor-pointer">
                                 <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32L19.513 8.2Z" />
                             </svg>
                             <svg @click="handleDialog(item.id)" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-red-600 cursor-pointer">
@@ -64,7 +64,7 @@
                 </button>
             </div>
         </DialogModal>
-        <Modal :handlemodal="handlemodal">
+        <Modal v-if="useModal.showModal" :handlemodal="handlemodal" :id="useModal.id">
             <TodoForm />
         </Modal>
     </div>
@@ -72,6 +72,7 @@
 
 <script setup lang="ts">
     import { useModalStore } from '@/stores/modal';
+    import { useTodoStore } from '@/stores/todo';
     import { readableDate } from '@/helper/format';
     
     import Modal from '@/components/Modal.vue';
@@ -80,6 +81,7 @@
 
     const props = defineProps(['data', 'handleDelete']);
     const useModal = useModalStore();
+    const useTodo = useTodoStore();
 
     const block = (id: number) => {
         props.handleDelete(id);
@@ -88,6 +90,12 @@
 
     const handlemodal = () => {
         useModal.handlemodal();
+    }
+
+    const handleEdit = (id: number) => {
+        useModal.id = id;
+        handlemodal()
+        useTodo.getById(id);
     }
 
     const handleDialog = (id: number) => {

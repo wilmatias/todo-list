@@ -39,6 +39,7 @@ export const useModalStore = defineStore('modal', {
 
         reset() {
             this.showModal = false;
+            this.id = null;
         }
     },
 });

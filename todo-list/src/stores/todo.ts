@@ -5,7 +5,7 @@ import toast from '@/helper/toast.ts';
 interface TodoStoreState {
     error: null | Error;
     todoData: null | any;
-    viewTodo: null
+    viewTodo: null | any;
 }
 
 export const useTodoStore = defineStore('todo', {
@@ -24,6 +24,22 @@ export const useTodoStore = defineStore('todo', {
                 }
             } catch (error: any) {
                 this.error = error;
+            }
+        },
+
+        async getById(id: number) {
+            try {
+                const response = await makeRequest('get', `/todo/${id}`);
+                if (response && response.code && response.code >= 200 && response.code < 300) {
+                    this.viewTodo = response.data;
+                    this.error = null;
+                }
+                else {
+
+                }
+            } catch (error: any) {
+                this.error = error.message;
+                console.error('Error:', error.message);
             }
         },
 
@@ -53,10 +69,11 @@ export const useTodoStore = defineStore('todo', {
             } 
         },
 
-        async update(id: number, updatedContact: any) {
+        async update(id: number, updatedTodo: any) {
             try {
-                const response = await makeRequest('put', `/update/${id}`, updatedContact);
+                const response = await makeRequest('put', `/update/${id}`, updatedTodo);
                 if (response && response.code && response.code >= 200 && response.code < 300) {
+                    await this.getAll();
                     toast.success(response.message)
                     this.error = null;
                 } else {
@@ -90,6 +107,13 @@ export const useTodoStore = defineStore('todo', {
     },
 
     getters: {
+        viewTask(): string {
+            return this.viewTodo?.task || '';
+        },
+
+        viewStatus(): string {
+            return this.viewTodo?.status || '';
+        },
     },
     persist:true
 });
