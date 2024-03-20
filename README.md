@@ -14,27 +14,27 @@ Before you begin, ensure you have met the following requirements:
 Create a database named `todo_list` in your MySQL or PostgreSQL.
 
 ## Backend Configuration
-- Setup your .env variable
+Setup your .env variable
  - DB_DATABASE= `todo_list`
  - DB_USERNAME= `your username`
  - DB_PASSWORD= `your password`
 
-- Dependency Installation:
+Dependency Installation:
  - Run composer install to install PHP dependencies.
-- Database Migration:
+Database Migration:
  - Migrate the database changes by running: `php artisan migrate`
-- Database Seeding:
+Database Seeding:
  - Seed the TodosTableSeeder.php to populate your database with initial data by running: `php artisan db:seed --class=TodosTableSeeder`
-- Run the API:
+Run the API:
  - Start the Laravel development server by running: `php artisan serve`
 
 The API will be available at [localhost](http://localhost:8000).
 
 ## Frontend Configuration
 
-- Install Dependencies:
+Install Dependencies:
  -Navigate to the frontend directory and run: `npm install` to install all dependencies.
-- Run the Application:
+Run the Application:
  - Start the frontend application by running: `npm run dev`
 
 The application will be available at [localhost](http://localhost:3000).
